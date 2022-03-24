@@ -11,7 +11,7 @@ export class UserExistsPipe implements PipeTransform {
     const foundedEmail = await this.service.getByEmail(value.email, value.id);
     
     if (foundedEmail)
-      throw new HttpException(`Email em Uso!`, HttpStatus.CONFLICT)
+      throw new HttpException(`Email em Uso!`, HttpStatus.BAD_REQUEST)
     
     return value;
   }
