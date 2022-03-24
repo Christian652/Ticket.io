@@ -37,14 +37,14 @@ export class Event extends BaseEntity {
   @ManyToOne(
     () => Company,
     company => company.events,
-    { nullable: false }
+    { nullable: false, cascade: true, onDelete: 'SET NULL' }
   )
   company: Company;
 
   @ManyToOne(
     () => Place,
     place => place.events,
-    { nullable: false }
+    { nullable: false, cascade: true, onDelete: 'SET NULL' }
   )
   place: Place;
 

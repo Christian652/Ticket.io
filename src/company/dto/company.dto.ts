@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsNumber, IsString, IsOptional, IsDate, IsInt, isDecimal, IsDecimal, IsBoolean, IsNumberString, isBooleanString, IsBooleanString } from 'class-validator';
+import { IsNotEmpty, IsString, IsOptional, IsBoolean, IsEnum } from 'class-validator';
+import { PixKeyTypes } from '../enums/pixKeyTypes.enum';
 
 export class CompanyDTO {
     @IsOptional()
@@ -11,6 +12,14 @@ export class CompanyDTO {
     @IsString()
     @IsNotEmpty()
     owner_name: string;
+
+    @IsString()
+    @IsNotEmpty()
+    pix_key: string;
+
+    @IsEnum(PixKeyTypes)
+    @IsNotEmpty()
+    pix_key_type: PixKeyTypes;
 
     @IsString()
     @IsNotEmpty()

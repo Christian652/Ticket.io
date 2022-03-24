@@ -1,4 +1,7 @@
+import { Type } from 'class-transformer';
 import { IsNotEmpty, IsNumber, IsString, IsOptional, IsDate, IsInt, isDecimal, IsDecimal, IsBoolean, IsNumberString, isBooleanString, IsBooleanString } from 'class-validator';
+import { Company } from 'src/company/company.entity';
+import { Place } from 'src/place/place.entity';
 
 export class EventDTO {
     @IsOptional()
@@ -28,11 +31,17 @@ export class EventDTO {
     @IsOptional()
     status: string;
 
-    // @IsDate()
+    @Type(() => Company)
+    @IsNotEmpty()
+    company: Company;
+    
+    @Type(() => Place)
+    @IsNotEmpty()
+    place: Place;
+
     @IsNotEmpty()
     start_at: Date;
 
-    // @IsDate()
     @IsNotEmpty()
     end_at: Date;
 }

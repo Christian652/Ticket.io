@@ -17,14 +17,14 @@ export class TicketSale extends BaseEntity {
   @ManyToOne(
     () => User,
     user => user.ticket_sales,
-    { nullable: true}
+    { nullable: true, cascade: true, onDelete: 'CASCADE' }
   )
   user: User;
 
   @ManyToOne(
     () => Event,
     event => event.ticket_sales,
-    { nullable: true}
+    { nullable: true, cascade: true, onDelete: 'CASCADE' }
   )
   event: Event;
 

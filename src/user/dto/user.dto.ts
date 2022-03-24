@@ -1,6 +1,7 @@
-import { Exclude } from 'class-transformer';
+import { Exclude, Type } from 'class-transformer';
 import { IsEnum, IsInt, IsOptional, IsString, IsBoolean, IsNotEmpty } from 'class-validator';
 import { Role } from 'src/auth/enums/role.enum';
+import { Company } from 'src/company/company.entity';
 
 export class UserDTO {
   @IsOptional()
@@ -32,4 +33,8 @@ export class UserDTO {
   })
   @IsOptional()
   password?: string;
+
+  @Type(() => Company)
+  @IsNotEmpty()
+  company: Company;
 }

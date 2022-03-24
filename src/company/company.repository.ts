@@ -10,7 +10,7 @@ export class CompanyRepository extends Repository<Company> {
     dto: CompanyDTO,
   ): Promise<Company> {
     const {
-      id, name, owner_name, cnpj, status
+      id, name, owner_name, cnpj, status, pix_key, pix_key_type
     } = dto;
 
     const instance = this.create();
@@ -18,6 +18,8 @@ export class CompanyRepository extends Repository<Company> {
     instance.name = name;
     instance.owner_name = owner_name;
     instance.cnpj = cnpj;
+    instance.pix_key = pix_key;
+    instance.pix_key_type = pix_key_type;
     instance.status = status == false ? false : true;
     
     return await instance.save();

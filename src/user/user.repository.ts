@@ -12,13 +12,14 @@ export class UserRepository extends Repository<User> {
   public async saveUser(
     dto: UserDTO,
   ) {
-    const { id, name, email, password, role, status } = dto;
+    const { id, name, email, password, role, status, company } = dto;
     
     const user = new User();
     user.id = id != null ? id : null;
     user.name = name;
     user.email = email;
     user.role = role;
+    user.company = company;
     user.status = status == true ? true : false;
     
     if (password) {
@@ -33,13 +34,14 @@ export class UserRepository extends Repository<User> {
     dto: UpdateUserDTO,
   ) {
     try {
-      const { id, name, email, password, role } = dto;
+      const { id, name, email, password, role, company } = dto;
 
       const user = new User();
       user.id = id;
       user.name = name;
       user.email = email;
       user.role = role;
+      user.company = company;
 
       if (password) {
         const salt = await bcrypt.genSalt(10);

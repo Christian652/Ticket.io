@@ -31,7 +31,7 @@ export class User extends BaseEntity {
   @ManyToOne(
     () => Company,
     company => company.users,
-    { nullable: false }
+    { nullable: true, cascade: true, onDelete: 'CASCADE' }
   )
   company: Company;
 

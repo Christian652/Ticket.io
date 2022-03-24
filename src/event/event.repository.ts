@@ -11,7 +11,8 @@ export class EventRepository extends Repository<Event> {
   ): Promise<Event> {
     const {
       id, title, start_at, end_at, description,
-      status, thumb, ticket_price, ticket_limit, 
+      status, thumb, ticket_price, ticket_limit,
+      company, place
     } = dto;
 
     const instance = this.create();
@@ -24,6 +25,8 @@ export class EventRepository extends Repository<Event> {
     instance.thumb = thumb;
     instance.ticket_limit = ticket_limit;
     instance.ticket_price = ticket_price;
+    instance.company = company;
+    instance.place = place;
 
     return await instance.save();
   }

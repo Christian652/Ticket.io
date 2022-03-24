@@ -10,13 +10,15 @@ export class TicketSaleRepository extends Repository<TicketSale> {
     dto: TicketSaleDTO,
   ): Promise<TicketSale> {
     const {
-      id, selled_at, payed_back_at
+      id, selled_at, payed_back_at, user, event
     } = dto;
 
     const instance = this.create();
     instance.id = id !== null ? id : null;
     instance.selled_at = selled_at;
     instance.payed_back_at = payed_back_at;
+    instance.user = user;
+    instance.event = event;
     
     return await instance.save();
   }

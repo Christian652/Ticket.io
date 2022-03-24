@@ -1,5 +1,7 @@
+import { Type } from 'class-transformer';
 import { IsInt, IsNotEmpty, IsOptional, IsString, IsBoolean } from 'class-validator';
 import { Role } from 'src/auth/enums/role.enum';
+import { Company } from 'src/company/company.entity';
 
 export class UpdateUserDTO {
   @IsNotEmpty({
@@ -26,4 +28,8 @@ export class UpdateUserDTO {
   @IsString()
   @IsOptional()
   password?: string;
+
+  @Type(() => Company)
+  @IsOptional()
+  company?: Company;
 }

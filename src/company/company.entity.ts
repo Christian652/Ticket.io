@@ -1,6 +1,7 @@
 import { Event } from 'src/event/event.entity';
 import { User } from 'src/user/user.entity';
 import { PrimaryGeneratedColumn, BaseEntity, Column, Entity, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { PixKeyTypes } from './enums/pixKeyTypes.enum';
 
 @Entity({ name: "companies" })
 export class Company extends BaseEntity {
@@ -16,6 +17,12 @@ export class Company extends BaseEntity {
 
   @Column({ length: 255, nullable: false })
   owner_name: string;
+
+  @Column({ length: 255, nullable: false })
+  pix_key: string;
+
+  @Column({ length: 100, nullable: false })
+  pix_key_type: PixKeyTypes;
 
   @Column({ type: 'boolean', nullable: false, default: true })
   status: boolean;
