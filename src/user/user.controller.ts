@@ -17,6 +17,7 @@ import {
   UseGuards,
   UploadedFile,
   Res,
+  Req,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDTO } from './dto/user.dto';
@@ -27,26 +28,24 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/enums/role.enum';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateUserDTO } from './dto/update-user.dto';
+import { UserExistsPipe } from './pipes/userExists.pipe';
 
 @Controller('users')
 export class UserController {
   constructor(
-    private userService: UserService,
+    private service: UserService,
     private authService: AuthService
   ) { }
 
   @Post()
   @UsePipes(ValidationPipe)
-  @Roles(Role.Master)
-  @UseGuards(AuthGuard(), RolesGuard)
-  @UseInterceptors(FileInterceptor("profile_pic", { dest: './uploads/profiles' }))
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard())
   public async create(
-    @UploadedFile() profile_pic,
-    @Body() userDto: UserDTO,
+    @Body() dto: UserDTO,
   ) {
     try {
-      const user = await this.userService.save(userDto);
-      await this.authService.sendConfirmationMail(user);
+      const user = await this.service.save(dto);
 
       return user;
     } catch (error) {
@@ -54,61 +53,64 @@ export class UserController {
     }
   }
 
-  @Get('profile/:imgpath')
-  seeUploadedFile(@Param('imgpath') image, @Res() res) {
-    return res.sendFile(image, { root: './uploads/profiles' });
+  @Post('public')
+  @UsePipes(ValidationPipe, UserExistsPipe)
+  public async createPublic(
+    @Body() dto: UserDTO,
+  ) {
+    try {
+      dto.role = Role.Expectator;
+      return await this.service.save(dto);
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   @Patch()
-  @Roles(Role.Admin, Role.Master)
-  @UseGuards(AuthGuard(), RolesGuard)
-  @UsePipes(ValidationPipe)
-  @UseInterceptors(FileInterceptor("profile_pic", { dest: './uploads/profiles' }))
+  @UseGuards(AuthGuard())
+  @UsePipes(ValidationPipe, UserExistsPipe)
   public async update(
-    @UploadedFile() profile_pic,
-    @Body() userDto: UpdateUserDTO
+    @Body() dto: UpdateUserDTO,
+    @Req() req
   ): Promise<User> {
     try {
-      const user = await this.userService.update(userDto);
+      const user = req.user;
 
-      return user;
+      return await this.service.update(dto, user.role);
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
-  @Roles(Role.Admin, Role.Master)
+  @Roles(Role.Admin)
   @UseGuards(AuthGuard(), RolesGuard)
   @Get()
   public async getAll(): Promise<User[]> {
     try {
-      const users = await this.userService.getAll();
-      return users;
+      return await this.service.getAll();
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   @Get(':id')
-  @Roles(Role.Master, Role.Admin)
+  @Roles(Role.Admin)
   @UseGuards(AuthGuard(), RolesGuard)
   public async getOne(@Param('id', ParseIntPipe) id): Promise<User> {
     try {
-      const user = await this.userService.getOne(id);
-      return user;
+      return await this.service.getOne(id);
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   @Delete(':id')
-  @Roles(Role.Admin, Role.Master)
+  @Roles(Role.Admin)
   @UseGuards(AuthGuard(), RolesGuard) 
   public async delete(@Param('id', ParseIntPipe) id: number) {
     try {
-      const deletedUser = await this.userService.delete(id);
-      return deletedUser;
+      return await this.service.delete(id);
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }

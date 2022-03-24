@@ -9,36 +9,60 @@ export class EventRepository extends Repository<Event> {
   public async saveEvent(
     dto: EventDTO,
   ): Promise<Event> {
-    const { id, title, startAt, endAt } = dto;
+    const {
+      id, title, start_at, end_at, description,
+      status, thumb, ticket_price, ticket_limit, 
+    } = dto;
 
     const instance = this.create();
     instance.id = id ? id : null;
     instance.title = title;
-    instance.startAt = startAt;
-    instance.endAt = endAt;
+    instance.start_at = start_at;
+    instance.end_at = end_at;
+    instance.description = description;
+    instance.status = status == true ? true : false;
+    instance.thumb = thumb;
+    instance.ticket_limit = ticket_limit;
+    instance.ticket_price = ticket_price;
 
     return await instance.save();
   }
 
   public async getAll(parameters: GetEventFilterDTO) {
-    const { orderBy, sort, like } = parameters;
+    const { companyId, placeId, sort, like } = parameters;
 
     const query = this.createQueryBuilder('events');
 
-    if (like) 
+    if (like)
       query.andWhere(
-        'events.title LIKE :like', 
-        {like: `%${like}%`}
+        'events.title LIKE :like',
+        { like: `%${like}%` }
       );
 
-    if (orderBy) 
-      if (sort) {
-        query.orderBy(orderBy, sort);
-      } else {
-        query.orderBy(orderBy)
-      }
+    if (sort) {
+      query.orderBy('id', sort);
+    } else {
+      query.orderBy('id', 'ASC')
+    }
+
+    if (companyId)
+      query.andWhere("events.companyId = :companyId", { companyId })
+
+    if (placeId)
+      query.andWhere("events.event_place_id = :placeId", { placeId })
 
     return await query.getMany();
   }
+
+  public async disable(id: number) {
+    const register = await this.findOne(id);
+
+    if (register) {
+      register.status = false;
+      register.save();
+    }
+  }
+
+
 
 }

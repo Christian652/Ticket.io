@@ -4,7 +4,7 @@ import { Role } from 'src/auth/enums/role.enum';
 
 export class UserDTO {
   @IsOptional()
-  id?: any;
+  id?: number;
   
   @IsString({
     message: 'nome deve ser de tipo textual!'
@@ -20,10 +20,11 @@ export class UserDTO {
     message: 'papel deve ser de tipo textual!'
   })
   @IsEnum(Role)
-  role: Role;
+  @IsOptional()
+  role?: Role;
 
   @IsBoolean()
-  @IsNotEmpty()
+  @IsOptional()
   status?: boolean;
 
   @IsString({

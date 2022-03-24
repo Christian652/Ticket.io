@@ -7,8 +7,8 @@ import { Role } from 'src/auth/enums/role.enum';
 
 @Entity({name: "users"})
 export class User extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column()
   name: string;

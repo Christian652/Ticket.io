@@ -18,7 +18,6 @@ export class EventService {
     dto: EventDTO,
   ): Promise<Event> {
     try {
-      this.logger.log(` Saving ${dto.name} Event`);
       return await this.repository.saveEvent(dto);
     } catch (e) {
       throw new HttpException(e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -41,8 +40,7 @@ export class EventService {
 
   public async delete(id: number): Promise<void> {
     try {
-      this.logger.log(` Deleting Event : ${id} `);
-      await this.repository.delete(id);
+      await this.repository.disable(id);
     } catch (e) {
       throw new HttpException(e.code, HttpStatus.INTERNAL_SERVER_ERROR);
     }

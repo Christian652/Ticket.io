@@ -3,7 +3,6 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import { ROLES_KEY } from './decorators/roles.decorator';
-import { Role } from './enums/role.enum';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -19,25 +18,22 @@ export class RolesGuard implements CanActivate {
             context.getClass(),
         ]);
         if (!requiredRoles) return true;
-        
-        const { rawHeaders } = context.switchToHttp().getRequest();
-        const rawToken = rawHeaders.find(item => item.includes('Bearer'));
 
-        if (rawToken) {
-            const jwtWithoutBearer = rawToken.replace('Bearer ', '');
-            const decodedJwt = this.jwtService.decode(jwtWithoutBearer);
-            
-            if (decodedJwt) {
-                const user = await this.userService.findById({ id: decodedJwt['id'] });
-                if (!user) throw new HttpException('não existe usuário', 404)
-                if (user.role === Role.Stocker)
-                    if (user.id !== decodedJwt['id'])
-                        return false;
-    
-                return requiredRoles.includes(user.role);
-            } else {
-                return false;
-            }
-        } 
+        const { rawHeaders } = context.switchToHttp().getRequest();
+
+        const rawToken = rawHeaders.find(item => item.includes('Bearer'));
+        if (!rawToken) return false;
+
+        const jwtWithoutBearer = rawToken.replace('Bearer ', '');
+        const decodedJwt = this.jwtService.decode(jwtWithoutBearer);
+
+        if (!decodedJwt) return false;
+
+        const user = await this.userService.findById({ id: decodedJwt['id'] });
+        if (!user) throw new HttpException('não existe usuário', 404)
+
+        if (user.id != decodedJwt['id']) return false;
+
+        return requiredRoles.includes(user.role);
     }
 }

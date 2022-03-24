@@ -9,15 +9,30 @@ export class Event extends BaseEntity {
   @Column({ length: 255, nullable: false })
   title: string;
 
-  @Column({ type: 'timestamp', nullable: false })
-  startAt: Date;
+  @Column({ length: 255, nullable: false })
+  thumb: string;
 
-  @Column({ type: 'timestamp', nullable: false })
-  endAt: Date;
+  @Column({ type: 'longtext', nullable: false })
+  description: string;
+
+  @Column({ type: 'integer', nullable: false })
+  ticket_limit: number;
+
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: false })
+  ticket_price: number;
+
+  @Column({ type: 'boolean', nullable: false, default: true })
+  status: boolean;
+
+  @Column({ type: 'timestamp', nullable: false, default: () => "CURRENT_TIMESTAMP" })
+  start_at: Date;
+
+  @Column({ type: 'timestamp', nullable: false, default: () => "CURRENT_TIMESTAMP" })
+  end_at: Date;
 
   @CreateDateColumn()
-  createdAt: Date;
+  created_at: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updated_at: Date;
 }

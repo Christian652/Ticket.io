@@ -1,21 +1,19 @@
-import { IsOptional, IsString } from "class-validator";
+import { IsNumberString, IsOptional, IsString } from "class-validator";
 
 export class GetEventFilterDTO {
+  @IsOptional()
+  @IsString()
+  sort?: 'ASC' | 'DESC';
+
+  @IsOptional()
+  @IsNumberString()
+  companyId?: string;
+
+  @IsOptional()
+  @IsNumberString()
+  placeId?: string;
 
   @IsOptional()
   @IsString()
-  orderBy: string;
-
-  @IsOptional()
-  @IsString()
-  sort: 'ASC' | 'DESC';
-
-  @IsOptional()
-  @IsString()
-  like: string;
-
-  @IsOptional()
-  @IsString()
-  select: string;
-
+  like?: string;
 }

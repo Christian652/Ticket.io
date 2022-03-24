@@ -1,4 +1,4 @@
-import { Logger, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserRepository } from 'src/user/user.repository';
 import { UserService } from 'src/user/user.service';
@@ -7,7 +7,6 @@ import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
-import { SmtpModule } from 'src/smtp/smtp.module';
 
 @Module({
   imports: [
@@ -23,8 +22,7 @@ import { SmtpModule } from 'src/smtp/smtp.module';
         expiresIn: process.env.EXPIRESIN,
       },
     }),
-    PassportModule,
-    SmtpModule
+    PassportModule
   ],
   controllers: [AuthController],
   providers: [UserService, AuthService, JwtStrategy],

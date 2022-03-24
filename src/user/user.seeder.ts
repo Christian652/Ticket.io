@@ -14,54 +14,49 @@ export class UserSeeder implements Seeder {
 
   async seed(): Promise<any> {
     try {
+
+      const salt = await bcrypt.genSalt(10);
+
       const rawadminpassword = 'admin';
-      const adminsalt = await bcrypt.genSalt(10);
-      const adminpassword = await bcrypt.hash(rawadminpassword, adminsalt);
+      const adminpassword = await bcrypt.hash(rawadminpassword, salt);
     
-      const rawmasterpassword = 'master';
-      const mastersalt = await bcrypt.genSalt(10);
-      const masterpassword = await bcrypt.hash(rawmasterpassword, mastersalt);
+      const rawreceptionistpassword = 'receptionist';
+      const receptionistpassword = await bcrypt.hash(rawreceptionistpassword, salt);
     
       const rawstockerpassword = 'stocker';
-      const stockersalt = await bcrypt.genSalt(10);
-      const stockerpassword = await bcrypt.hash(rawstockerpassword, stockersalt);
+      const stockerpassword = await bcrypt.hash(rawstockerpassword, salt);
     
-      const rawadminstockerpassword = 'adminstocker';
-      const adminstockersalt = await bcrypt.genSalt(10);
-      const adminstockerpassword = await bcrypt.hash(rawadminstockerpassword, adminstockersalt);
+      const rawcompanypassword = 'company';
+      const companypassword = await bcrypt.hash(rawcompanypassword, salt);
     
       return await this.userRepository.insertMany([
         {
           name: 'admin user',
           email: 'admin@gmail.com',
+          status: true,
           role: Role.Admin,
-          profile_path: 'aaaa',
-          confirmated: true,
           password: adminpassword,
         },
         {
-          name: 'master user',
-          email: 'master@gmail.com',
-          role: Role.Master,
-          profile_path: 'aaaa',
-          confirmated: true,
-          password: masterpassword,
+          name: 'receptionist user',
+          email: 'receptionist@gmail.com',
+          status: true,
+          role: Role.Receptionist,
+          password: receptionistpassword,
         },
         {
           name: 'stocker user',
           email: 'stocker@gmail.com',
-          role: Role.Stocker,
-          profile_path: 'aaaa',
-          confirmated: true,
+          status: true,
+          role: Role.Expectator,
           password: stockerpassword,
         },
         {
-          name: 'adminstocker user',
-          email: 'adminstocker@gmail.com',
-          role: Role.StockerAdmin,
-          profile_path: 'aaaa',
-          confirmated: true,
-          password: adminstockerpassword,
+          name: 'company user',
+          email: 'company@gmail.com',
+          status: true,
+          role: Role.Company,
+          password: companypassword,
         },
       ]);  
     } catch (error) {
