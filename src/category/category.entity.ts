@@ -1,4 +1,5 @@
-import { PrimaryGeneratedColumn, BaseEntity, Column, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Event } from 'src/event/event.entity';
+import { PrimaryGeneratedColumn, BaseEntity, Column, Entity, CreateDateColumn, UpdateDateColumn, ManyToMany } from 'typeorm';
 
 @Entity({ name: "categories" })
 export class Category extends BaseEntity {
@@ -11,6 +12,13 @@ export class Category extends BaseEntity {
 
   @Column({ type: 'boolean', nullable: false, default: true })
   status: boolean;
+
+  @ManyToMany(
+    () => Event,
+    events => events.categories,
+    { nullable: true, cascade: false }
+  )
+  events: Event[];
 
   @CreateDateColumn()
   created_at: Date;

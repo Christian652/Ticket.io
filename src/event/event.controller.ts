@@ -14,7 +14,8 @@ import {
   ParseIntPipe,
   Query,
   UseInterceptors,
-  UploadedFile
+  UploadedFile,
+  Res
 } from '@nestjs/common';
 import { EventService } from './event.service';
 import { EventDTO } from './dto/event.dto';
@@ -26,6 +27,7 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/enums/role.enum';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer'; 
+import { Response, response } from 'express';
 @UseGuards(AuthGuard(), RolesGuard)
 @Controller('events')
 export class EventController {
@@ -83,6 +85,15 @@ export class EventController {
     // caso o nivel de usuário seja recepcionista , caso seja empresa ve
     // se é da mesma empresa 
     return await this.service.getOne(id);
+  }
+
+  @Get('thumb/:path')
+  @Roles(Role.Company, Role.Expectator, Role.Receptionist)
+  public async getThumb(
+    @Param('path') path: string,
+    @Res() response: Response
+  ): Promise<any> {
+    return response.sendFile(path)
   }
 
   @Delete(':id')

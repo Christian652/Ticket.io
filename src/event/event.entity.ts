@@ -1,4 +1,8 @@
-import { PrimaryGeneratedColumn, BaseEntity, Column, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Category } from 'src/category/category.entity';
+import { Company } from 'src/company/company.entity';
+import { Place } from 'src/place/place.entity';
+import { TicketSale } from 'src/ticketSale/ticketSale.entity';
+import { PrimaryGeneratedColumn, BaseEntity, Column, Entity, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, ManyToMany } from 'typeorm';
 
 @Entity({ name: "events" })
 export class Event extends BaseEntity {
@@ -29,6 +33,33 @@ export class Event extends BaseEntity {
 
   @Column({ type: 'timestamp', nullable: false, default: () => "CURRENT_TIMESTAMP" })
   end_at: Date;
+
+  @ManyToOne(
+    () => Company,
+    company => company.events,
+    { nullable: false }
+  )
+  company: Company;
+
+  @ManyToOne(
+    () => Place,
+    place => place.events,
+    { nullable: false }
+  )
+  place: Place;
+
+  @ManyToMany(
+    () => Category,
+    category => category.events,
+    { nullable: true, cascade: true, onDelete: 'SET NULL' }
+  )
+  categories: Category[];
+
+  @OneToMany(
+    () => TicketSale,
+    ticket => ticket.event
+  )
+  ticket_sales: TicketSale[];
 
   @CreateDateColumn()
   created_at: Date;

@@ -1,4 +1,5 @@
-import { PrimaryGeneratedColumn, BaseEntity, Column, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Event } from 'src/event/event.entity';
+import { PrimaryGeneratedColumn, BaseEntity, Column, Entity, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 
 @Entity({ name: "places" })
 export class Place extends BaseEntity {
@@ -20,6 +21,12 @@ export class Place extends BaseEntity {
 
   @Column({ type: 'boolean', nullable: false, default: true })
   status: boolean;
+
+  @OneToMany(
+    () => Event,
+    event => event.place
+  )
+  events: Event[];
 
   @CreateDateColumn()
   created_at: Date;

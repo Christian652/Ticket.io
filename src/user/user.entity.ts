@@ -1,8 +1,10 @@
 
-import { PrimaryGeneratedColumn, BaseEntity, Column, Entity, CreateDateColumn, OneToMany, ManyToMany, UpdateDateColumn} from 'typeorm';
+import { PrimaryGeneratedColumn, BaseEntity, Column, Entity, CreateDateColumn, OneToMany, ManyToMany, UpdateDateColumn, ManyToOne} from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
 import { Role } from 'src/auth/enums/role.enum';
+import { Company } from 'src/company/company.entity';
+import { TicketSale } from 'src/ticketSale/ticketSale.entity';
 
 
 @Entity({name: "users"})
@@ -26,6 +28,19 @@ export class User extends BaseEntity {
   @Exclude({ toPlainOnly: true })
   password: string;
 
+  @ManyToOne(
+    () => Company,
+    company => company.users,
+    { nullable: false }
+  )
+  company: Company;
+
+  @OneToMany(
+    () => TicketSale,
+    ticket => ticket.user
+  )
+  ticket_sales: TicketSale[];
+  
   @CreateDateColumn()
   created_at: Date;
 

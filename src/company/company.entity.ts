@@ -1,4 +1,6 @@
-import { PrimaryGeneratedColumn, BaseEntity, Column, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Event } from 'src/event/event.entity';
+import { User } from 'src/user/user.entity';
+import { PrimaryGeneratedColumn, BaseEntity, Column, Entity, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 
 @Entity({ name: "companies" })
 export class Company extends BaseEntity {
@@ -17,6 +19,20 @@ export class Company extends BaseEntity {
 
   @Column({ type: 'boolean', nullable: false, default: true })
   status: boolean;
+
+  @OneToMany(
+    () => Event,
+    event => event.company,
+    { nullable: true }
+  )
+  events: Event[];
+
+  @OneToMany(
+    () => User,
+    user => user.company,
+    { nullable: true }
+  )
+  users: User[];
 
   @CreateDateColumn()
   created_at: Date;
