@@ -1,8 +1,8 @@
-import { IsNotEmpty, IsNumber, IsString, IsOptional, IsDate, IsInt, isDecimal, IsDecimal, IsBoolean } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, IsOptional, IsDate, IsInt, isDecimal, IsDecimal, IsBoolean, IsNumberString, isBooleanString, IsBooleanString } from 'class-validator';
 
 export class EventDTO {
     @IsOptional()
-    id?: number;
+    id?: string;
 
     @IsString()
     @IsNotEmpty()
@@ -16,23 +16,23 @@ export class EventDTO {
     @IsOptional()
     description: string;
 
-    @IsInt()
+    @IsNumberString()
     @IsNotEmpty()
     ticket_limit: number;
 
-    @IsDecimal()
+    @IsNumberString()
     @IsNotEmpty()
     ticket_price: number;
 
-    @IsBoolean()
+    @IsBooleanString()
     @IsOptional()
-    status: boolean;
+    status: string;
 
-    @IsDate()
+    // @IsDate()
     @IsNotEmpty()
     start_at: Date;
 
-    @IsDate()
+    // @IsDate()
     @IsNotEmpty()
     end_at: Date;
 }

@@ -12,7 +12,7 @@ export class Event extends BaseEntity {
   @Column({ length: 255, nullable: false })
   thumb: string;
 
-  @Column({ type: 'longtext', nullable: false })
+  @Column({ type: 'longtext', nullable: true })
   description: string;
 
   @Column({ type: 'integer', nullable: false })

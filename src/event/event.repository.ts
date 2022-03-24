@@ -15,12 +15,12 @@ export class EventRepository extends Repository<Event> {
     } = dto;
 
     const instance = this.create();
-    instance.id = id ? id : null;
+    instance.id = id !== 'null' ? +id : null;
     instance.title = title;
     instance.start_at = start_at;
     instance.end_at = end_at;
     instance.description = description;
-    instance.status = status == true ? true : false;
+    instance.status = status == "false" ? false : true;
     instance.thumb = thumb;
     instance.ticket_limit = ticket_limit;
     instance.ticket_price = ticket_price;
