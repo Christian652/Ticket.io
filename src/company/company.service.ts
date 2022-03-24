@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from './company.entity';
 import { CompanyDTO } from './dto/company.dto';
 import { CompanyRepository } from './company.repository';
-import { GetCompanyFilterDTO } from './dto/getCompanys.filter.dto';
+import { GetCompanyFilterDTO } from './dto/getCompanies.filter.dto';
 
 @Injectable()
 export class CompanyService {
