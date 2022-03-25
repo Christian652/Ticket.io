@@ -16,7 +16,7 @@ export class Category extends BaseEntity {
   @ManyToMany(
     () => Event,
     events => events.categories,
-    { nullable: true, cascade: false }
+    { nullable: true, cascade: false, onDelete: 'NO ACTION' }
   )
   events: Event[];
 

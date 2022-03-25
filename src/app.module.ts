@@ -10,12 +10,13 @@ import { CategoryModule } from './category/category.module';
 import { PlaceModule } from './place/place.module';
 import { CompanyModule } from './company/company.module';
 import { TicketSaleModule } from './ticketSale/ticketSale.module';
+import { PixTransactionModule } from './pix/pixTransaction/pixTransaction.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(configService.getTypeOrmData()),
     UserModule, AuthModule, EventModule, CategoryModule, CompanyModule,
-    PlaceModule, TicketSaleModule,
+    PlaceModule, TicketSaleModule, PixTransactionModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,0 +1,30 @@
+import {
+  Controller,
+  Get,
+  UseGuards,
+  HttpException,
+  HttpStatus,
+  Query
+} from '@nestjs/common';
+import { PixTransactionService } from './pixTransaction.service';
+import { PixTransaction } from './pixTransaction.entity';
+import { AuthGuard } from '@nestjs/passport';
+import { GetPixTransactionFilterDTO } from './dto/getPixTransactions.filter.dto';
+import { RolesGuard } from 'src/auth/roles.guard';
+
+@UseGuards(AuthGuard(), RolesGuard)
+@Controller('pix-transactions')
+export class PixTransactionController {
+  constructor(
+    private service: PixTransactionService
+  ) { }
+
+  @Get()
+  public async getAll(@Query() parameters: GetPixTransactionFilterDTO): Promise<PixTransaction[]> {
+    try {
+      return await this.service.getAll(parameters);
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+}
