@@ -14,10 +14,14 @@ export class TicketSaleDTO {
     payed_back_at?: Date;
 
     @Type(() => User)
-    @IsNotEmpty()
+    @IsNotEmpty({
+        message: 'Informe o Comprador'
+    })
     user: User;
 
     @Type(() => Event)
-    @IsNotEmpty()
+    @IsNotEmpty({
+        message: 'Informe o Evento do Ingresso'
+    })
     event: Event;
 }

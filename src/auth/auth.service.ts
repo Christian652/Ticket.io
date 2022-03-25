@@ -20,6 +20,9 @@ export class AuthService {
     if (!login)
       throw new HttpException('Credenciais inválidas!', HttpStatus.UNAUTHORIZED)
 
+    if (!login.status)
+      throw new HttpException('Conta Desativada, Entre em Contato com Administrador do Sistema!', HttpStatus.UNAUTHORIZED)
+
     const id = login.id;
     const token = this.generateToken(id);
 
@@ -37,7 +40,7 @@ export class AuthService {
   private generateToken(id) {
     const expiresIn = process.env.EXPIRESIN;
     const accessToken = this.jwtService.sign({ id: id });
-    
+
     return {
       expiresIn,
       accessToken,

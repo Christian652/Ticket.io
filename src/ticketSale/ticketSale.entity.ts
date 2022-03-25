@@ -11,7 +11,7 @@ export class TicketSale extends BaseEntity {
   @Column({ type: 'timestamp', default: "CURRENT_TIMESTAMP" , nullable: false })
   selled_at: Date;
 
-  @Column({ type: 'timestamp', default: "CURRENT_TIMESTAMP" , nullable: false })
+  @Column({ type: 'timestamp', nullable: true })
   payed_back_at: Date;
   
   @ManyToOne(

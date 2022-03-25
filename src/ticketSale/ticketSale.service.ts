@@ -14,9 +14,7 @@ export class TicketSaleService {
     private repository: TicketSaleRepository,
   ) { }
 
-  public async save(
-    dto: TicketSaleDTO,
-  ): Promise<TicketSale> {
+  public async save(dto: TicketSaleDTO): Promise<TicketSale> {
     try {
       return await this.repository.saveTicketSale(dto);
     } catch (e) {
@@ -31,10 +29,9 @@ export class TicketSaleService {
   public async getOne(id: number): Promise<TicketSale> {
 
     const foundTicketSale = await this.repository.findOne(id);
-    if (!foundTicketSale) {
-      this.logger.warn(` Can't Found TicketSale With Id : ${id} `);
+    if (!foundTicketSale) 
       throw new NotFoundException(`Não Existe Produto Com o Id: ${id}`);
-    }
+    
     return foundTicketSale;
   }
 }

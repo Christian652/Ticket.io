@@ -64,7 +64,7 @@ export class UserService {
 
     const login = await user.validatePassword(password);
 
-    return login ? { id: user.id, name: user.name, role: user.role } : null;
+    return login ? { id: user.id, name: user.name, role: user.role, status: user.status } : null;
   }
 
   async findById({ id }: any): Promise<User> {

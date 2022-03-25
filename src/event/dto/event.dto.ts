@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsNotEmpty, IsNumber, IsString, IsOptional, IsDate, IsInt, isDecimal, IsDecimal, IsBoolean, IsNumberString, isBooleanString, IsBooleanString } from 'class-validator';
+import { IsNotEmpty, IsString, IsOptional, IsNumberString, IsBooleanString, Min } from 'class-validator';
 import { Company } from 'src/company/company.entity';
 import { Place } from 'src/place/place.entity';
 
@@ -8,7 +8,9 @@ export class EventDTO {
     id?: string;
 
     @IsString()
-    @IsNotEmpty()
+    @IsNotEmpty({
+        message: 'Informe o Titulo do Evento'
+    })
     title: string;
 
     @IsString()
@@ -21,10 +23,12 @@ export class EventDTO {
 
     @IsNumberString()
     @IsNotEmpty()
+    @Min(0, { message: 'O Limite de Ingressos Deve Ser maior que 0!'})
     ticket_limit: number;
 
     @IsNumberString()
     @IsNotEmpty()
+    @Min(0, { message: 'O Preço de Ingresso Deve Ser maior que 0!'})
     ticket_price: number;
 
     @IsBooleanString()
@@ -32,16 +36,24 @@ export class EventDTO {
     status: string;
 
     @Type(() => Company)
-    @IsNotEmpty()
+    @IsNotEmpty({
+        message: 'Informe a Empresa do Evento!'
+    })
     company: Company;
     
     @Type(() => Place)
-    @IsNotEmpty()
+    @IsNotEmpty({
+        message: 'Informe o Local do Evento!'
+    })
     place: Place;
 
-    @IsNotEmpty()
+    @IsNotEmpty({
+        message: 'Informe a data de inicio do evento!'
+    })
     start_at: Date;
 
-    @IsNotEmpty()
+    @IsNotEmpty({
+        message: 'Informe a data de fim do evento!'
+    })
     end_at: Date;
 }

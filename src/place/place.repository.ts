@@ -51,7 +51,7 @@ export class PlaceRepository extends Repository<Place> {
     if (sort) {
       query.orderBy('id', sort);
     } else {
-      query.orderBy('id', 'ASC')
+      query.orderBy('id', 'DESC')
     }
     return await query.getMany();
   }

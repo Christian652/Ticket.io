@@ -1,11 +1,13 @@
-import { IsNotEmpty, IsNumber, IsString, IsOptional, IsDate, IsInt, isDecimal, IsDecimal, IsBoolean, IsNumberString, isBooleanString, IsBooleanString } from 'class-validator';
+import { IsNotEmpty, IsString, IsOptional, IsBoolean } from 'class-validator';
 
 export class CategoryDTO {
     @IsOptional()
     id?: number;
 
     @IsString()
-    @IsNotEmpty()
+    @IsNotEmpty({
+        message: 'Informe o Titulo da Categoria'
+    })
     title: string;
 
     @IsBoolean()

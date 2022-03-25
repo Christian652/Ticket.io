@@ -6,26 +6,38 @@ export class CompanyDTO {
     id?: number;
 
     @IsString()
-    @IsNotEmpty()
+    @IsNotEmpty({
+        message: 'Informe o Nome da Empresa'
+    })
     name: string;
 
     @IsString()
-    @IsNotEmpty()
+    @IsNotEmpty({
+        message: 'Informe o Nome do(a) Proprietário(a)'
+    })
     owner_name: string;
 
     @IsString()
-    @IsNotEmpty()
+    @IsNotEmpty({
+        message: 'Informe a chave pix da empresa'
+    })
     pix_key: string;
 
-    @IsEnum(PixKeyTypes)
-    @IsNotEmpty()
+    @IsEnum(PixKeyTypes, {
+        message: `Valores Aceitos: ${PixKeyTypes.CPF} ${PixKeyTypes.EMAIL} ${PixKeyTypes.RANDOM}`
+    })
+    @IsNotEmpty({
+        message: 'Informe o tipo de chave pix'
+    })
     pix_key_type: PixKeyTypes;
 
     @IsString()
-    @IsNotEmpty()
+    @IsNotEmpty({
+        message: 'Informe o cnpj'
+    })
     cnpj: string;
 
     @IsBoolean()
     @IsOptional()
-    status: boolean;
+    status?: boolean;
 }

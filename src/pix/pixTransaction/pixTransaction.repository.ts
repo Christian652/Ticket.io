@@ -35,7 +35,7 @@ export class PixTransactionRepository extends Repository<PixTransaction> {
     if (sort) {
       query.orderBy('id', sort);
     } else {
-      query.orderBy('id', 'ASC')
+      query.orderBy('id', 'DESC')
     }
     return await query.getMany();
   }

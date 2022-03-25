@@ -3,7 +3,7 @@ import { IsNumberString, IsOptional, IsString } from "class-validator";
 export class GetEventFilterDTO {
   @IsOptional()
   @IsString()
-  sort?: 'ASC' | 'DESC';
+  sort?: 'DESC' | 'DESC';
 
   @IsOptional()
   @IsNumberString()

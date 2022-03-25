@@ -4,7 +4,9 @@ export class PixTransactionDTO {
     @IsOptional()
     id?: number;
 
-    @IsNotEmpty()
+    @IsNotEmpty({
+        message: 'Informe o Titulo'
+    })
     @IsString()
     title: string;
 

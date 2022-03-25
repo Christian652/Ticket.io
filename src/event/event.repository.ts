@@ -45,7 +45,7 @@ export class EventRepository extends Repository<Event> {
     if (sort) {
       query.orderBy('id', sort);
     } else {
-      query.orderBy('id', 'ASC')
+      query.orderBy('id', 'DESC')
     }
 
     if (companyId)

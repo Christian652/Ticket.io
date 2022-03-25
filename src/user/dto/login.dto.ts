@@ -1,4 +1,4 @@
-import { IsString , IsInt } from 'class-validator';
+import { IsString , IsInt, IsBoolean } from 'class-validator';
 
 export class LoginDTO {
 
@@ -10,6 +10,9 @@ export class LoginDTO {
 
   @IsString()
   role: string;
+
+  @IsBoolean()
+  status: boolean;
 
 
 }

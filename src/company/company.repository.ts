@@ -28,18 +28,20 @@ export class CompanyRepository extends Repository<Company> {
   public async getAll(parameters: GetCompanyFilterDTO) {
     const { sort, like } = parameters;
 
-    const query = this.createQueryBuilder('companys');
+    const query = this.createQueryBuilder('companies');
+    query.innerJoinAndSelect('companies.events', 'companies_events')
+    query.innerJoinAndSelect('companies.users', 'companies_users')
 
     if (like)
       query.andWhere(
-        'companys.name LIKE :like',
+        'companies.name LIKE :like',
         { like: `%${like}%` }
       );
 
     if (sort) {
       query.orderBy('id', sort);
     } else {
-      query.orderBy('id', 'ASC')
+      query.orderBy('id', 'DESC')
     }
     return await query.getMany();
   }

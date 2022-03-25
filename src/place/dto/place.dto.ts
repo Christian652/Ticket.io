@@ -1,23 +1,31 @@
-import { IsNotEmpty, IsNumber, IsString, IsOptional, IsDate, IsInt, isDecimal, IsDecimal, IsBoolean, IsNumberString, isBooleanString, IsBooleanString } from 'class-validator';
+import { IsNotEmpty, IsString, IsOptional, IsBoolean } from 'class-validator';
 
 export class PlaceDTO {
     @IsOptional()
     id?: number;
 
-    @IsNotEmpty()
+    @IsNotEmpty({
+        message: 'Informe o Titulo do Local'
+    })
     @IsString()
     title: string;
 
     @IsString()
-    @IsNotEmpty()
+    @IsNotEmpty({
+        message: 'Informe a Cidade'
+    })
     city: string;
 
     @IsString()
-    @IsNotEmpty()
+    @IsNotEmpty({
+        message: 'Informe a Rua'
+    })
     street: string;
 
     @IsString()
-    @IsNotEmpty()
+    @IsNotEmpty({
+        message: 'Informe o Cep'
+    })
     cep: string;
 
     @IsBoolean()

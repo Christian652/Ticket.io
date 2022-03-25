@@ -22,33 +22,18 @@ import { GetTicketSaleFilterDTO } from './dto/getTicketSales.filter.dto';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/enums/role.enum';
+import { TicketSoldOutPipe } from './pipes/ticketSoldOut.pipe';
+import { UserHasBuyedPipe } from './pipes/userHasBuyed.pipe';
 
 @UseGuards(AuthGuard(), RolesGuard)
 @Controller('ticket-sales')
 export class TicketSaleController {
-  constructor(
-    private service: TicketSaleService
-  ) { }
+  constructor(private service: TicketSaleService) { }
 
   @Post()
   @Roles(Role.Expectator)
-  @UsePipes(ValidationPipe)
-  public async create(
-    @Body() dto: TicketSaleDTO
-  ): Promise<TicketSale> {
-    try {
-      return await this.service.save(dto);
-    } catch (error) {
-      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
-
-  @Patch()
-  @Roles(Role.Expectator, Role.Admin)
-  @UsePipes(ValidationPipe)
-  public async update(
-    @Body() dto: TicketSaleDTO
-  ): Promise<TicketSale> {
+  @UsePipes(ValidationPipe, TicketSoldOutPipe, UserHasBuyedPipe)
+  public async create(@Body() dto: TicketSaleDTO): Promise<TicketSale> {
     try {
       return await this.service.save(dto);
     } catch (error) {
