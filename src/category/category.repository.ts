@@ -24,11 +24,11 @@ export class CategoryRepository extends Repository<Category> {
   public async getAll(parameters: GetCategoryFilterDTO) {
     const { sort, like } = parameters;
 
-    const query = this.createQueryBuilder('categorys');
+    const query = this.createQueryBuilder('categories');
 
     if (like)
       query.andWhere(
-        'categorys.name LIKE :like',
+        'categories.title LIKE :like',
         { like: `%${like}%` }
       );
 

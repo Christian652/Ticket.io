@@ -16,4 +16,7 @@ export class GetEventFilterDTO {
   @IsOptional()
   @IsString()
   like?: string;
+
+  @IsOptional()
+  date?: Date;
 }

@@ -15,7 +15,8 @@ import {
   Query,
   UseInterceptors,
   UploadedFile,
-  Res
+  Res,
+  Req
 } from '@nestjs/common';
 import { EventService } from './event.service';
 import { EventDTO } from './dto/event.dto';
@@ -28,6 +29,7 @@ import { Role } from 'src/auth/enums/role.enum';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer'; 
 import { Response, response } from 'express';
+import { EventTrated } from './types/EventTrated';
 @UseGuards(AuthGuard(), RolesGuard)
 @Controller('events')
 export class EventController {
@@ -58,11 +60,26 @@ export class EventController {
   )
   public async create(
     @Body() dto: EventDTO,
-    @UploadedFile() thumb
-  ): Promise<Event> {
+    @UploadedFile() thumb,
+    @Req() req
+  ): Promise<EventTrated> {
     try {
       dto.thumb = thumb.path;
-      return await this.service.save(dto);
+      dto.company = req.user.company
+      const event = await this.service.save(dto);
+
+      return {
+        id: event.id,
+        description: event.description,
+        start_at: event.start_at,
+        end_at: event.end_at,
+        status: event.status,
+        title: event.title,
+        ticket_limit: event.ticket_limit,
+        ticket_price: event.ticket_price,
+        place: { id: event.place.id },
+        company: { id: event.company.id },
+      }
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }

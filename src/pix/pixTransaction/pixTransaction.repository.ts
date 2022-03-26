@@ -16,27 +16,44 @@ export class PixTransactionRepository extends Repository<PixTransaction> {
     const instance = this.create();
     instance.id = id !== null ? id : null;
     instance.title = title;
-    
+
     return await instance.save();
   }
 
   public async getAll(parameters: GetPixTransactionFilterDTO) {
-    const { sort, like } = parameters;
+    const { sort, event, user, company, like } = parameters;
 
-    const query = this.createQueryBuilder('pixTransactions');
+    const query = this.createQueryBuilder('pix');
+    query.innerJoinAndSelect('pix.event', 'pix_event');
+    query.innerJoinAndSelect('pix_event.company', 'pix_event_company');
+    query.innerJoinAndSelect('pix_event.ticket_sales', 'pix_event_tickets');
+    query.innerJoinAndSelect('pix_event_tickets.user', 'pix_event_tickets_user');
 
     if (like) {
       query.orWhere(
-        'pixTransactions.title LIKE :like',
+        'pix.title LIKE :like',
         { like: `%${like}%` }
       );
     }
-      
+
     if (sort) {
       query.orderBy('id', sort);
     } else {
       query.orderBy('id', 'DESC')
     }
-    return await query.getMany();
+    let result = await query.getMany();
+
+    if (event)
+      result = result.filter(item => item.event == event);
+    if (user)
+      result = result.filter(item => {
+        const founded = item.event.ticket_sales.find(sale => sale.user.id == user.id);
+
+        return !!founded;
+      });
+    if (company)
+      result = result.filter(item => item.event.company == company);
+
+    return result;
   }
 }

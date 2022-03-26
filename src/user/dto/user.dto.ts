@@ -35,6 +35,6 @@ export class UserDTO {
   password?: string;
 
   @Type(() => Company)
-  @IsNotEmpty()
-  company: Company;
+  @IsOptional()
+  company?: Company;
 }

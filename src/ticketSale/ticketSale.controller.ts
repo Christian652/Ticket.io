@@ -12,7 +12,8 @@ import {
   ValidationPipe,
   ParseIntPipe,
   Query,
-  Patch
+  Patch,
+  Req
 } from '@nestjs/common';
 import { TicketSaleService } from './ticketSale.service';
 import { TicketSaleDTO } from './dto/ticketSale.dto';
@@ -24,6 +25,7 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/enums/role.enum';
 import { TicketSoldOutPipe } from './pipes/ticketSoldOut.pipe';
 import { UserHasBuyedPipe } from './pipes/userHasBuyed.pipe';
+import { Request } from 'express';
 
 @UseGuards(AuthGuard(), RolesGuard)
 @Controller('ticket-sales')
@@ -33,8 +35,12 @@ export class TicketSaleController {
   @Post()
   @Roles(Role.Expectator)
   @UsePipes(ValidationPipe, TicketSoldOutPipe, UserHasBuyedPipe)
-  public async create(@Body() dto: TicketSaleDTO): Promise<TicketSale> {
+  public async create(
+    @Body() dto: TicketSaleDTO,
+    @Req() req
+  ): Promise<TicketSale> {
     try {
+      dto.user = req.user;
       return await this.service.save(dto);
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);

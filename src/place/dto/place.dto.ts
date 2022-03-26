@@ -24,6 +24,12 @@ export class PlaceDTO {
 
     @IsString()
     @IsNotEmpty({
+        message: 'Informe o estado'
+    })
+    state: string;
+
+    @IsString()
+    @IsNotEmpty({
         message: 'Informe o Cep'
     })
     cep: string;

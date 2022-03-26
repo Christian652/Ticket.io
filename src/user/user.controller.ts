@@ -39,15 +39,18 @@ export class UserController {
 
   @Post()
   @UsePipes(ValidationPipe)
-  @Roles(Role.Admin)
+  @Roles(Role.Admin, Role.Company)
   @UseGuards(AuthGuard())
   public async create(
     @Body() dto: UserDTO,
+    @Req() req
   ) {
     try {
+      if (dto.role == Role.Receptionist)
+        dto.company = req.user.company;
       const user = await this.service.save(dto);
 
-      return user;
+      return { ...user, password: null, company: { id: user.company.id } };
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -107,7 +110,7 @@ export class UserController {
 
   @Delete(':id')
   @Roles(Role.Admin)
-  @UseGuards(AuthGuard(), RolesGuard) 
+  @UseGuards(AuthGuard(), RolesGuard)
   public async delete(@Param('id', ParseIntPipe) id: number) {
     try {
       return await this.service.delete(id);

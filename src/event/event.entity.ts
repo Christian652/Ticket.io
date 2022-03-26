@@ -1,5 +1,6 @@
 import { Category } from 'src/category/category.entity';
 import { Company } from 'src/company/company.entity';
+import { PixTransaction } from 'src/pix/pixTransaction/pixTransaction.entity';
 import { Place } from 'src/place/place.entity';
 import { TicketSale } from 'src/ticketSale/ticketSale.entity';
 import { PrimaryGeneratedColumn, BaseEntity, Column, Entity, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, ManyToMany } from 'typeorm';
@@ -36,22 +37,19 @@ export class Event extends BaseEntity {
 
   @ManyToOne(
     () => Company,
-    company => company.events,
-    { nullable: false, cascade: true, onDelete: 'SET NULL' }
+    company => company.events
   )
   company: Company;
 
   @ManyToOne(
     () => Place,
-    place => place.events,
-    { nullable: false, cascade: true, onDelete: 'SET NULL' }
+    place => place.events
   )
   place: Place;
 
   @ManyToMany(
     () => Category,
-    category => category.events,
-    { nullable: true, cascade: true, onDelete: 'SET NULL' }
+    category => category.events
   )
   categories: Category[];
 
@@ -60,6 +58,12 @@ export class Event extends BaseEntity {
     ticket => ticket.event
   )
   ticket_sales: TicketSale[];
+
+  @OneToMany(
+    () => PixTransaction,
+    transaction => transaction.event
+  )
+  pix_transactions: PixTransaction[];
 
   @CreateDateColumn()
   created_at: Date;

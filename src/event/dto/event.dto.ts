@@ -23,29 +23,28 @@ export class EventDTO {
 
     @IsNumberString()
     @IsNotEmpty()
-    @Min(0, { message: 'O Limite de Ingressos Deve Ser maior que 0!'})
-    ticket_limit: number;
+    ticket_limit: string;
 
     @IsNumberString()
     @IsNotEmpty()
-    @Min(0, { message: 'O Preço de Ingresso Deve Ser maior que 0!'})
-    ticket_price: number;
+    ticket_price: string;
 
     @IsBooleanString()
     @IsOptional()
     status: string;
 
     @Type(() => Company)
-    @IsNotEmpty({
-        message: 'Informe a Empresa do Evento!'
-    })
+    @IsOptional()
     company: Company;
-    
+
     @Type(() => Place)
+    @IsOptional()
+    place: Place;
+    
     @IsNotEmpty({
         message: 'Informe o Local do Evento!'
     })
-    place: Place;
+    placeId: string;
 
     @IsNotEmpty({
         message: 'Informe a data de inicio do evento!'

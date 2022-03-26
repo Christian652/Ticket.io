@@ -31,7 +31,7 @@ export class CategoryController {
   ) { }
 
   @Post()
-  @Roles(Role.Admin)
+  @Roles(Role.Admin, Role.Company)
   @UsePipes(ValidationPipe)
   public async create(
     @Body() dto: CategoryDTO
@@ -44,7 +44,7 @@ export class CategoryController {
   }
 
   @Patch()
-  @Roles(Role.Admin)
+  @Roles(Role.Admin, Role.Company)
   @UsePipes(ValidationPipe)
   public async update(
     @Body() dto: CategoryDTO

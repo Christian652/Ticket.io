@@ -17,7 +17,7 @@ export class TicketSaleDTO {
     @IsNotEmpty({
         message: 'Informe o Comprador'
     })
-    user: User;
+    user?: User;
 
     @Type(() => Event)
     @IsNotEmpty({

@@ -20,7 +20,7 @@ export class UserRepository extends Repository<User> {
     user.email = email;
     user.role = role;
     user.company = company;
-    user.status = status == true ? true : false;
+    user.status = status == false ? false : true;
     
     if (password) {
       const salt = await bcrypt.genSalt(10);

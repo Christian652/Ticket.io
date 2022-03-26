@@ -68,7 +68,10 @@ export class UserService {
   }
 
   async findById({ id }: any): Promise<User> {
-    return await this.repository.findOne({ where: { id } });
+    return await this.repository.findOne({
+      where: { id },
+      relations: ['company']
+    });
   }
 
   public async delete(userId: number): Promise<User> {

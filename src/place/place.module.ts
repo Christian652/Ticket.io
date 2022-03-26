@@ -13,6 +13,7 @@ import { PlaceService } from './place.service';
     AuthModule
   ], 
   controllers: [PlaceController],
-  providers: [PlaceService, UserService]
+  providers: [PlaceService, UserService],
+  exports: [PlaceService]
 })
 export class PlaceModule {}

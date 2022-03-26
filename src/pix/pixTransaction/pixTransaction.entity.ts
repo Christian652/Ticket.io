@@ -1,5 +1,5 @@
 import { Event } from 'src/event/event.entity';
-import { PrimaryGeneratedColumn, BaseEntity, Column, Entity, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { PrimaryGeneratedColumn, BaseEntity, Column, Entity, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
 
 @Entity({ name: "pix_transactions" })
 export class PixTransaction extends BaseEntity {

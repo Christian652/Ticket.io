@@ -31,7 +31,7 @@ export class PlaceController {
   ) { }
 
   @Post()
-  @Roles(Role.Admin)
+  @Roles(Role.Admin, Role.Company)
   @UsePipes(ValidationPipe)
   public async create(
     @Body() dto: PlaceDTO

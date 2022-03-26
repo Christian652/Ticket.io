@@ -10,7 +10,7 @@ export class PlaceRepository extends Repository<Place> {
     dto: PlaceDTO,
   ): Promise<Place> {
     const {
-      id, title, city, cep, street, status
+      id, title, city, cep, street, status, state
     } = dto;
 
     const instance = this.create();
@@ -19,6 +19,7 @@ export class PlaceRepository extends Repository<Place> {
     instance.city = city;
     instance.cep = cep;
     instance.street = street;
+    instance.state = state;
     instance.status = status == false ? false : true;
     
     return await instance.save();

@@ -19,6 +19,9 @@ export class Place extends BaseEntity {
   @Column({ length: 255, nullable: false })
   cep: string;
 
+  @Column({ length: 255, nullable: false })
+  state: string;
+
   @Column({ type: 'boolean', nullable: false, default: true })
   status: boolean;
 

@@ -4,6 +4,8 @@ import { Event } from './event.entity';
 import { EventDTO } from './dto/event.dto';
 import { EventRepository } from './event.repository';
 import { GetEventFilterDTO } from './dto/getEvents.filter.dto';
+import { getRepository } from 'typeorm';
+import { Place } from 'src/place/place.entity';
 
 @Injectable()
 export class EventService {
@@ -11,13 +13,15 @@ export class EventService {
   
   constructor(
     @InjectRepository(EventRepository)
-    private repository: EventRepository,
+    private repository: EventRepository
   ) { }
 
   public async save(
     dto: EventDTO,
   ): Promise<Event> {
     try {
+      const place = await getRepository(Place).findOne(+dto.placeId)
+      dto.place = place;
       return await this.repository.saveEvent(dto);
     } catch (e) {
       throw new HttpException(e, HttpStatus.INTERNAL_SERVER_ERROR);

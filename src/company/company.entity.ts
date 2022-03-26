@@ -30,7 +30,6 @@ export class Company extends BaseEntity {
   @OneToMany(
     () => Event,
     event => event.company,
-    { nullable: true }
   )
   events: Event[];
 

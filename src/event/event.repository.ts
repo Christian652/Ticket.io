@@ -23,8 +23,8 @@ export class EventRepository extends Repository<Event> {
     instance.description = description;
     instance.status = status == "false" ? false : true;
     instance.thumb = thumb;
-    instance.ticket_limit = ticket_limit;
-    instance.ticket_price = ticket_price;
+    instance.ticket_limit = +ticket_limit;
+    instance.ticket_price = +ticket_price;
     instance.company = company;
     instance.place = place;
 
@@ -32,7 +32,7 @@ export class EventRepository extends Repository<Event> {
   }
 
   public async getAll(parameters: GetEventFilterDTO) {
-    const { companyId, placeId, sort, like } = parameters;
+    const { companyId, placeId, sort, like, date } = parameters;
 
     const query = this.createQueryBuilder('events');
 
@@ -52,7 +52,12 @@ export class EventRepository extends Repository<Event> {
       query.andWhere("events.companyId = :companyId", { companyId })
 
     if (placeId)
-      query.andWhere("events.event_place_id = :placeId", { placeId })
+      query.andWhere("events.placeId = :placeId", { placeId })
+
+    if (date) {
+      query.andWhere("events.start_at <= :date", { date });
+      query.andWhere("events.end_at >= :date", { date });
+    }
 
     return await query.getMany();
   }
