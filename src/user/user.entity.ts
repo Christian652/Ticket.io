@@ -5,6 +5,7 @@ import { Exclude } from 'class-transformer';
 import { Role } from 'src/auth/enums/role.enum';
 import { Company } from 'src/company/company.entity';
 import { TicketSale } from 'src/ticketSale/ticketSale.entity';
+import { PixKeyTypes } from 'src/company/enums/pixKeyTypes.enum';
 
 
 @Entity({ name: "users" })
@@ -27,6 +28,12 @@ export class User extends BaseEntity {
   @Column()
   @Exclude({ toPlainOnly: true })
   password: string;
+
+  @Column({ length: 255, nullable: true })
+  pix_key: string;
+
+  @Column({ length: 100, nullable: true })
+  pix_key_type: PixKeyTypes;
 
   @ManyToOne(
     () => Company,

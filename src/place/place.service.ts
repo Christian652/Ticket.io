@@ -33,7 +33,7 @@ export class PlaceService {
     const foundPlace = await this.repository.findOne(id);
     if (!foundPlace) {
       this.logger.warn(` Can't Found Place With Id : ${id} `);
-      throw new NotFoundException(`Não Existe Produto Com o Id: ${id}`);
+      throw new NotFoundException(`Não Existe Lugar Com o Id: ${id}`);
     }
     return foundPlace;
   }

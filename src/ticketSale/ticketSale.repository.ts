@@ -30,15 +30,15 @@ export class TicketSaleRepository extends Repository<TicketSale> {
     query.innerJoinAndSelect('ticketSales.event', 'ticketSales_event');
     
     if (event)
-      query.andWhere('ticketSales.event = :event', { event });
+      query.andWhere('ticketSales_event.id = :event', { event: event.id });
 
     if (user)
-      query.andWhere('ticketSales.user = :user', { user });
+      query.andWhere('ticketSales_user.id = :user', { user: user.id });
 
     if (sort) {
-      query.orderBy('id', sort);
+      query.orderBy('ticketSales.id', sort);
     } else {
-      query.orderBy('id', 'DESC')
+      query.orderBy('ticketSales.id', 'DESC')
     }
     return await query.getMany();
   }

@@ -33,7 +33,7 @@ export class PixTransactionService {
     const foundPixTransaction = await this.repository.findOne(id);
     if (!foundPixTransaction) {
       this.logger.warn(` Can't Found PixTransaction With Id : ${id} `);
-      throw new NotFoundException(`Não Existe Produto Com o Id: ${id}`);
+      throw new NotFoundException(`Não Existe Transação Com o Id: ${id}`);
     }
     return foundPixTransaction;
   }

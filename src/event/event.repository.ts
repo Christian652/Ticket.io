@@ -12,7 +12,7 @@ export class EventRepository extends Repository<Event> {
     const {
       id, title, start_at, end_at, description,
       status, thumb, ticket_price, ticket_limit,
-      company, place
+      company, place, categories
     } = dto;
 
     const instance = this.create();
@@ -27,6 +27,7 @@ export class EventRepository extends Repository<Event> {
     instance.ticket_price = +ticket_price;
     instance.company = company;
     instance.place = place;
+    instance.categories = categories;
 
     return await instance.save();
   }
@@ -35,6 +36,9 @@ export class EventRepository extends Repository<Event> {
     const { companyId, placeId, sort, like, date } = parameters;
 
     const query = this.createQueryBuilder('events');
+    query.innerJoinAndSelect('events.company', 'event_company');
+    query.innerJoinAndSelect('events.place', 'event_place');
+    query.leftJoinAndSelect('events.categories', 'event_categories');
 
     if (like)
       query.andWhere(
@@ -43,9 +47,9 @@ export class EventRepository extends Repository<Event> {
       );
 
     if (sort) {
-      query.orderBy('id', sort);
+      query.orderBy('events.id', sort);
     } else {
-      query.orderBy('id', 'DESC')
+      query.orderBy('events.id', 'DESC')
     }
 
     if (companyId)

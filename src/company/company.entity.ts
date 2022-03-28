@@ -12,16 +12,16 @@ export class Company extends BaseEntity {
   @Column({ length: 255, nullable: false })
   name: string;
 
-  @Column({ length: 20, nullable: false })
+  @Column({ length: 20, select: false, nullable: false })
   cnpj: string;
 
   @Column({ length: 255, nullable: false })
   owner_name: string;
 
-  @Column({ length: 255, nullable: false })
+  @Column({ length: 255, select: true, nullable: false })
   pix_key: string;
 
-  @Column({ length: 100, nullable: false })
+  @Column({ length: 100, select: false, nullable: false })
   pix_key_type: PixKeyTypes;
 
   @Column({ type: 'boolean', nullable: false, default: true })

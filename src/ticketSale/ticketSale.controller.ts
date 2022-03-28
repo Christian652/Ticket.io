@@ -24,7 +24,6 @@ import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/enums/role.enum';
 import { TicketSoldOutPipe } from './pipes/ticketSoldOut.pipe';
-import { UserHasBuyedPipe } from './pipes/userHasBuyed.pipe';
 import { Request } from 'express';
 
 @UseGuards(AuthGuard(), RolesGuard)
@@ -34,7 +33,7 @@ export class TicketSaleController {
 
   @Post()
   @Roles(Role.Expectator)
-  @UsePipes(ValidationPipe, TicketSoldOutPipe, UserHasBuyedPipe)
+  @UsePipes(ValidationPipe, TicketSoldOutPipe)
   public async create(
     @Body() dto: TicketSaleDTO,
     @Req() req
@@ -43,21 +42,31 @@ export class TicketSaleController {
       dto.user = req.user;
       return await this.service.save(dto);
     } catch (error) {
+      if (error instanceof HttpException)
+        throw error;
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   @Get()
-  public async getAll(@Query() parameters: GetTicketSaleFilterDTO): Promise<TicketSale[]> {
+  public async getAll(
+    @Query() parameters: GetTicketSaleFilterDTO,
+    @Req() req
+  ): Promise<TicketSale[]> {
     try {
-      return await this.service.getAll(parameters);
+      return await this.service.getAll(parameters, req.user);
     } catch (error) {
+      if (error instanceof HttpException)
+        throw error;
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   @Get(':id')
-  public async getOne(@Param('id', ParseIntPipe) id: number): Promise<TicketSale> {
-    return await this.service.getOne(id);
+  public async getOne(
+    @Param('id', ParseIntPipe) id: number,
+    @Req() req
+  ): Promise<TicketSale> {
+    return await this.service.getOne(id, req.user);
   }
 }

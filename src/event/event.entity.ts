@@ -3,7 +3,7 @@ import { Company } from 'src/company/company.entity';
 import { PixTransaction } from 'src/pix/pixTransaction/pixTransaction.entity';
 import { Place } from 'src/place/place.entity';
 import { TicketSale } from 'src/ticketSale/ticketSale.entity';
-import { PrimaryGeneratedColumn, BaseEntity, Column, Entity, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, ManyToMany } from 'typeorm';
+import { PrimaryGeneratedColumn, BaseEntity, Column, Entity, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 
 @Entity({ name: "events" })
 export class Event extends BaseEntity {
@@ -47,9 +47,11 @@ export class Event extends BaseEntity {
   )
   place: Place;
 
+  @JoinTable()
   @ManyToMany(
     () => Category,
-    category => category.events
+    category => category.events,
+    { nullable: true }
   )
   categories: Category[];
 

@@ -39,6 +39,8 @@ export class CategoryController {
     try {
       return await this.service.save(dto);
     } catch (error) {
+      if (error instanceof HttpException)
+        throw error;
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

@@ -33,7 +33,7 @@ export class CategoryService {
     const foundCategory = await this.repository.findOne(id);
     if (!foundCategory) {
       this.logger.warn(` Can't Found Category With Id : ${id} `);
-      throw new NotFoundException(`Não Existe Produto Com o Id: ${id}`);
+      throw new NotFoundException(`Não Existe Categoria Com o Id: ${id}`);
     }
     return foundCategory;
   }

@@ -11,12 +11,14 @@ import { PlaceModule } from './place/place.module';
 import { CompanyModule } from './company/company.module';
 import { TicketSaleModule } from './ticketSale/ticketSale.module';
 import { PixTransactionModule } from './pix/pixTransaction/pixTransaction.module';
-
+import { ScheduleModule } from '@nestjs/schedule';
+import { PixModule } from './pix/pix.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot(configService.getTypeOrmData()),
+    ScheduleModule.forRoot(),
     UserModule, AuthModule, EventModule, CategoryModule, CompanyModule,
-    PlaceModule, TicketSaleModule, PixTransactionModule
+    PlaceModule, TicketSaleModule, PixTransactionModule, PixModule
   ],
   controllers: [AppController],
   providers: [AppService],

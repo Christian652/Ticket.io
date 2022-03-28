@@ -14,9 +14,7 @@ export class TicketSaleDTO {
     payed_back_at?: Date;
 
     @Type(() => User)
-    @IsNotEmpty({
-        message: 'Informe o Comprador'
-    })
+    @IsOptional()
     user?: User;
 
     @Type(() => Event)

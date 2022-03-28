@@ -12,7 +12,7 @@ export class UserRepository extends Repository<User> {
   public async saveUser(
     dto: UserDTO,
   ) {
-    const { id, name, email, password, role, status, company } = dto;
+    const { id, name, email, password, role, status, company, pix_key, pix_key_type } = dto;
     
     const user = new User();
     user.id = id != null ? id : null;
@@ -20,6 +20,8 @@ export class UserRepository extends Repository<User> {
     user.email = email;
     user.role = role;
     user.company = company;
+    user.pix_key = pix_key ? pix_key : null;
+    user.pix_key_type = pix_key_type ? pix_key_type : null;
     user.status = status == false ? false : true;
     
     if (password) {

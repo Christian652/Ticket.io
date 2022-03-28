@@ -33,7 +33,7 @@ export class CompanyService {
     const foundCompany = await this.repository.findOne(id);
     if (!foundCompany) {
       this.logger.warn(` Can't Found Company With Id : ${id} `);
-      throw new NotFoundException(`Não Existe Produto Com o Id: ${id}`);
+      throw new NotFoundException(`Não Existe Empresa Com o Id: ${id}`);
     }
     return foundCompany;
   }

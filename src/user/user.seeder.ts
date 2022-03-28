@@ -14,20 +14,10 @@ export class UserSeeder implements Seeder {
 
   async seed(): Promise<any> {
     try {
-
       const salt = await bcrypt.genSalt(10);
 
       const rawadminpassword = 'admin';
       const adminpassword = await bcrypt.hash(rawadminpassword, salt);
-    
-      const rawreceptionistpassword = 'receptionist';
-      const receptionistpassword = await bcrypt.hash(rawreceptionistpassword, salt);
-    
-      const rawstockerpassword = 'stocker';
-      const stockerpassword = await bcrypt.hash(rawstockerpassword, salt);
-    
-      const rawcompanypassword = 'company';
-      const companypassword = await bcrypt.hash(rawcompanypassword, salt);
     
       return await this.userRepository.insertMany([
         {
@@ -36,28 +26,7 @@ export class UserSeeder implements Seeder {
           status: true,
           role: Role.Admin,
           password: adminpassword,
-        },
-        {
-          name: 'receptionist user',
-          email: 'receptionist@gmail.com',
-          status: true,
-          role: Role.Receptionist,
-          password: receptionistpassword,
-        },
-        {
-          name: 'stocker user',
-          email: 'stocker@gmail.com',
-          status: true,
-          role: Role.Expectator,
-          password: stockerpassword,
-        },
-        {
-          name: 'company user',
-          email: 'company@gmail.com',
-          status: true,
-          role: Role.Company,
-          password: companypassword,
-        },
+        }
       ]);  
     } catch (error) {
       console.log(error)

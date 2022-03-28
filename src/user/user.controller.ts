@@ -52,6 +52,8 @@ export class UserController {
 
       return { ...user, password: null, company: { id: user.company.id } };
     } catch (error) {
+      if (error instanceof HttpException)
+        throw error;
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

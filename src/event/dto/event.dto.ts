@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
 import { IsNotEmpty, IsString, IsOptional, IsNumberString, IsBooleanString, Min } from 'class-validator';
+import { Category } from 'src/category/category.entity';
 import { Company } from 'src/company/company.entity';
 import { Place } from 'src/place/place.entity';
 
@@ -40,11 +41,20 @@ export class EventDTO {
     @Type(() => Place)
     @IsOptional()
     place: Place;
+
+    @Type(() => Category)
+    @IsOptional()
+    categories: Category[];
     
     @IsNotEmpty({
         message: 'Informe o Local do Evento!'
     })
     placeId: string;
+
+    @IsNotEmpty({
+        message: 'Informe os Ids de Categoria separados por,!'
+    })
+    categoryIds: string;
 
     @IsNotEmpty({
         message: 'Informe a data de inicio do evento!'

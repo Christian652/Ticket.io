@@ -27,9 +27,10 @@ import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/enums/role.enum';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer'; 
+import { diskStorage } from 'multer';
 import { Response, response } from 'express';
 import { EventTrated } from './types/EventTrated';
+import { PlaceInUsePipe } from './pipes/placeInUse.pipe';
 @UseGuards(AuthGuard(), RolesGuard)
 @Controller('events')
 export class EventController {
@@ -39,7 +40,7 @@ export class EventController {
 
   @Post()
   @Roles(Role.Company)
-  @UsePipes(ValidationPipe)
+  @UsePipes(ValidationPipe, PlaceInUsePipe)
   @UseInterceptors(
     FileInterceptor("thumb", {
       storage: diskStorage({
@@ -81,6 +82,8 @@ export class EventController {
         company: { id: event.company.id },
       }
     } catch (error) {
+      if (error instanceof HttpException)
+        throw error;
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
@@ -95,31 +98,29 @@ export class EventController {
     }
   }
 
+  @Get('thumb')
+  @Roles(Role.Company, Role.Expectator, Role.Receptionist)
+  public async getThumb(
+    @Query('path') path: string,
+    @Res() response: Response
+  ): Promise<any> {
+    return response.sendfile(path)
+  }
+
   @Get(':id')
   @Roles(Role.Company, Role.Expectator, Role.Receptionist)
   public async getOne(@Param('id', ParseIntPipe) id: number): Promise<Event> {
-    // verificar se o id de evento passado é da mesma empresa do recepcionista
-    // caso o nivel de usuário seja recepcionista , caso seja empresa ve
-    // se é da mesma empresa 
     return await this.service.getOne(id);
-  }
-
-  @Get('thumb/:path')
-  @Roles(Role.Company, Role.Expectator, Role.Receptionist)
-  public async getThumb(
-    @Param('path') path: string,
-    @Res() response: Response
-  ): Promise<any> {
-    return response.sendFile(path)
   }
 
   @Delete(':id')
   @Roles(Role.Company)
-  public async delete(@Param('id', ParseIntPipe) id: number) {
+  public async delete(
+    @Param('id', ParseIntPipe) id: number,
+    @Req() req
+  ) {
     try {
-      // verificar se o evento desse id é da mesma empresa do usuário company logado
-
-      return await this.service.delete(id);
+      return await this.service.delete(id, req.user);
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }

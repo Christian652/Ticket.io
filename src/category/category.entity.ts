@@ -10,7 +10,7 @@ export class Category extends BaseEntity {
   @Column({ length: 255, nullable: false })
   title: string;
 
-  @Column({ type: 'boolean', nullable: false, default: true })
+  @Column({ type: 'boolean', select: false, nullable: false, default: true })
   status: boolean;
 
   @ManyToMany(
@@ -20,9 +20,9 @@ export class Category extends BaseEntity {
   )
   events: Event[];
 
-  @CreateDateColumn()
+  @CreateDateColumn({ select: false })
   created_at: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ select: false })
   updated_at: Date;
 }
