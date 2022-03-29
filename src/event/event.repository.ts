@@ -39,6 +39,8 @@ export class EventRepository extends Repository<Event> {
     query.innerJoinAndSelect('events.company', 'event_company');
     query.innerJoinAndSelect('events.place', 'event_place');
     query.leftJoinAndSelect('events.categories', 'event_categories');
+    query.leftJoinAndSelect('events.ticket_sales', 'event_tickets');
+    query.innerJoinAndSelect('events_tickets.user', 'event_tickets_user');
 
     if (like)
       query.andWhere(

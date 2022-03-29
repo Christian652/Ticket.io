@@ -31,6 +31,8 @@ import { diskStorage } from 'multer';
 import { Response, response } from 'express';
 import { EventTrated } from './types/EventTrated';
 import { PlaceInUsePipe } from './pipes/placeInUse.pipe';
+import { CannotEditLimitPipe } from './pipes/cannotEditLimit.pipe';
+import { CannotEditWithZerosPipe } from './pipes/cannotEditWithZeros.pipe';
 @UseGuards(AuthGuard(), RolesGuard)
 @Controller('events')
 export class EventController {
@@ -40,7 +42,10 @@ export class EventController {
 
   @Post()
   @Roles(Role.Company)
-  @UsePipes(ValidationPipe, PlaceInUsePipe)
+  @UsePipes(
+    ValidationPipe, PlaceInUsePipe,
+    CannotEditLimitPipe, CannotEditWithZerosPipe
+  )
   @UseInterceptors(
     FileInterceptor("thumb", {
       storage: diskStorage({
@@ -90,8 +95,13 @@ export class EventController {
 
   @Get()
   @Roles(Role.Company, Role.Expectator, Role.Receptionist)
-  public async getAll(@Query() parameters: GetEventFilterDTO): Promise<Event[]> {
+  public async getAll(
+    @Query() parameters: GetEventFilterDTO,
+    @Req() req
+  ): Promise<Event[]> {
     try {
+      if (req.user?.company)
+        parameters.companyId = req.user.company.id;
       return await this.service.getAll(parameters);
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);

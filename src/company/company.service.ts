@@ -30,7 +30,10 @@ export class CompanyService {
 
   public async getOne(id: number): Promise<Company> {
 
-    const foundCompany = await this.repository.findOne(id);
+    const foundCompany = await this.repository.findOne({
+      where: { id },
+      relations: ['events']
+    });
     if (!foundCompany) {
       this.logger.warn(` Can't Found Company With Id : ${id} `);
       throw new NotFoundException(`Não Existe Empresa Com o Id: ${id}`);
@@ -40,6 +43,21 @@ export class CompanyService {
 
   public async delete(id: number): Promise<void> {
     try {
+      const reloaded = await this.getOne(id);
+      if (reloaded?.events) {
+        reloaded.events.forEach(event => {
+          event.status = false;
+          event.save();
+        })
+      }
+
+      if (reloaded?.users) {
+        reloaded.users.forEach(user => {
+          user.status = false;
+          user.save();
+        })
+      }
+
       await this.repository.disable(id);
     } catch (e) {
       throw new HttpException(e.code, HttpStatus.INTERNAL_SERVER_ERROR);

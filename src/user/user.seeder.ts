@@ -19,6 +19,9 @@ export class UserSeeder implements Seeder {
       const rawadminpassword = 'admin';
       const adminpassword = await bcrypt.hash(rawadminpassword, salt);
     
+      const rawexpectadorpassword = 'expectador';
+      const expectadorpassword = await bcrypt.hash(rawexpectadorpassword, salt);
+    
       return await this.userRepository.insertMany([
         {
           name: 'admin user',
@@ -26,7 +29,28 @@ export class UserSeeder implements Seeder {
           status: true,
           role: Role.Admin,
           password: adminpassword,
-        }
+        },
+        {
+          name: 'joão expectador',
+          email: 'joão@gmail.com',
+          status: true,
+          role: Role.Expectator,
+          password: expectadorpassword,
+        },
+        {
+          name: 'marcos expectador',
+          email: 'marcos@gmail.com',
+          status: true,
+          role: Role.Expectator,
+          password: expectadorpassword,
+        },
+        {
+          name: 'lucas expectador',
+          email: 'lucas@gmail.com',
+          status: true,
+          role: Role.Expectator,
+          password: expectadorpassword,
+        },
       ]);  
     } catch (error) {
       console.log(error)
